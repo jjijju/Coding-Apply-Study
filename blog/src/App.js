@@ -24,6 +24,16 @@ function App() {
 			</div>
 			<h4>Blog Title</h4>
 			<button onClick={changeTitle}>수정</button>
+			{
+				title.map((tit) => (
+					<div className="list">
+						<h3>{tit} <span onClick={ () => { setLike(like + 1); } }>👍</span> {like} </h3>
+						<p className="list=descript">2020/07/29</p>
+						<hr />
+					</div>
+				))
+
+			}
 			<div className="list">
 				<h3> {title[0]} <span onClick={ () => { setLike(like + 1); } }>👍</span> {like} </h3>
 				<p className="list-descript">2020/07/29</p>
