@@ -23,13 +23,15 @@ body {
 	padding-right: 20px;
 }
 
-.list-title {
-	
-}
-
 .list-descript {
 	font-size: 14px;
 	opacity: 0.3;
+}
+
+.modal {
+	margin-top: 20px;
+	padding: 20px;
+	background: #eee;
 }
 
 .App-logo {
