@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Contents = ({ camera }) => {
+function Contents({ camera }) {
     return (
         <>
             {camera.map((item, index) => (
@@ -14,6 +14,6 @@ const Contents = ({ camera }) => {
             ))}
         </>
     );
-};
+}
 
 export default Contents;
