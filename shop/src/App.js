@@ -9,6 +9,7 @@ import Detail from './components/Detail';
 
 function App() {
     let [state, setState] = useState(Data);
+    const [stock, setStock] = useState([10, 11, 12]);
 
     return (
         <div className="App">
@@ -16,7 +17,7 @@ function App() {
 
             <Switch>
                 <Route exact path="/" render={() => <Main product={state} />} />
-                <Route path="/detail/:id" render={() => <Detail product={state} />} />
+                <Route path="/detail/:id" render={() => <Detail product={state} stock={stock} setStock={setStock} />} />
             </Switch>
         </div>
     );

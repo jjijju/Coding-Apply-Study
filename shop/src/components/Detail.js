@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import '../style/Detail.scss';
@@ -12,7 +12,21 @@ let Title = styled.h4`
     color: ${(props) => props.color};
 `;
 
-function Detail({ product }) {
+function Detail({ product, stock, setStock }) {
+    let [show, setShow] = useState(true);
+    let [input, setInput] = useState('');
+
+    console.log('on');
+    useEffect(() => {
+        let timer = setTimeout(() => {
+            setShow(false);
+        }, 2000);
+
+        return () => {
+            clearTimeout(timer);
+        };
+    }, []);
+
     let history = useHistory();
     let { id } = useParams();
     let item = product.find((c) => c.id === parseInt(id));
@@ -22,9 +36,19 @@ function Detail({ product }) {
             <Box>
                 <Title className="red">Detail</Title>
             </Box>
-            <div className="my-alert my-alert-red">
-                <p>재고가 얼마 남지 않았습니다.</p>
-            </div>
+
+            {input}
+            <input
+                onChange={(e) => {
+                    setInput(e.target.value);
+                }}
+            />
+
+            {show ? (
+                <div className="my-alert my-alert-red">
+                    <p>재고가 얼마 남지 않았습니다.</p>
+                </div>
+            ) : null}
             <div className="row">
                 <div className="col-md-6">
                     <img src={item.image} alt={item.title} width="100%" />
@@ -33,7 +57,15 @@ function Detail({ product }) {
                     <h4 className="pt-5">{item.title}</h4>
                     <p>{item.content}</p>
                     <p>{item.price}</p>
-                    <button className="btn btn-danger">주문하기</button>
+                    <Info stock={stock} />
+                    <button
+                        className="btn btn-danger"
+                        onClick={() => {
+                            setStock([9, 10, 11]);
+                        }}
+                    >
+                        주문하기
+                    </button>
                     &nbsp;
                     <button
                         className="btn btn-danger"
@@ -48,6 +80,10 @@ function Detail({ product }) {
             </div>
         </div>
     );
+}
+
+function Info({ stock }) {
+    return <p>재고 : {stock[0]}</p>;
 }
 
 export default Detail;

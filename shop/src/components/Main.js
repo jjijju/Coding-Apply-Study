@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Jumbotron, Button } from 'react-bootstrap';
 import Contents from './Contents';
+import axios from 'axios';
 
 function Main({ product }) {
+    const [state, setState] = useState(product);
+
     return (
         <>
             <Jumbotron className="background">
@@ -17,8 +20,23 @@ function Main({ product }) {
             </Jumbotron>
             <div className="container">
                 <div className="row">
-                    <Contents camera={product} />
+                    <Contents camera={state} />
                 </div>
+                <button
+                    className="btn btn-primary"
+                    onClick={() => {
+                        axios
+                            .get('https://codingapple1.github.io/shop/data2.json')
+                            .then((result) => {
+                                setState([...state, ...result.data]);
+                            })
+                            .catch(() => {
+                                console.log('❌');
+                            });
+                    }}
+                >
+                    더보기
+                </button>
             </div>
         </>
     );
