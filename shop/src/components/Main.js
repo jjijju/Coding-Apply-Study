@@ -3,8 +3,6 @@ import { Jumbotron, Button } from 'react-bootstrap';
 import Contents from './Contents';
 import axios from 'axios';
 
-export let 재고context = React.createContext();
-
 function Main({ product }) {
     let [state, setState] = useState(product);
     const [stock, setStock] = useState([10, 11, 12]);
@@ -22,11 +20,9 @@ function Main({ product }) {
                 </p>
             </Jumbotron>
             <div className="container">
-                <재고context.Provider value={stock}>
-                    <div className="row">
-                        <Contents camera={state} />
-                    </div>
-                </재고context.Provider>
+                <div className="row">
+                    <Contents camera={state} />
+                </div>
                 <button
                     className="btn btn-primary"
                     onClick={() => {

@@ -1,9 +1,6 @@
-import React, { useContext } from 'react';
-import { 재고context } from './../App';
+import React from 'react';
 
 function Contents({ camera }) {
-    let stock = useContext(재고context);
-
     return (
         <>
             {camera.map((item, index) => (
