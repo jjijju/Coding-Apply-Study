@@ -6,17 +6,51 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { createStore, combineReducers } from 'redux';
 
-let store = createStore(() => {
-    return [
-        {
-            id: 0,
-            name: 'camera',
-            quan: 2,
-        },
-    ];
-});
+let alertInitiate = true;
+
+function reducer2(state = alertInitiate, action) {
+    if (action.type === 'close') {
+        state = false;
+    }
+
+    return state;
+}
+
+let initiate = [
+    {
+        id: 1,
+        name: 'AMD',
+        quan: 2,
+    },
+    {
+        id: 2,
+        name: 'Intel',
+        quan: 3,
+    },
+];
+
+function reducer(state = initiate, action) {
+    if (action.type === 'add') {
+        let copy = [...state];
+        copy.push(action.payload);
+
+        return copy;
+    } else if (action.type === 'plus') {
+        let copy = [...state];
+        copy[0].quan++;
+        return copy;
+    } else if (action.type === 'minus') {
+        let copy = [...state];
+        copy[0].quan--;
+        return copy;
+    } else {
+        return state;
+    }
+}
+
+let store = createStore(combineReducers({ reducer, reducer2 }));
 
 ReactDOM.render(
     <React.StrictMode>

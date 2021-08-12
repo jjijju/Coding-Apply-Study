@@ -3,6 +3,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { Nav } from 'react-bootstrap';
 import { CSSTransition } from 'react-transition-group';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
 import '../style/Detail.scss';
 
 let Box = styled.div`
@@ -14,14 +15,13 @@ let Title = styled.h4`
     color: ${(props) => props.color};
 `;
 
-function Detail({ product, stock, setStock }) {
+function Detail(props) {
     let [show, setShow] = useState(true);
     let [input, setInput] = useState('');
 
     const [tab, setTab] = useState(0);
     const [animation, setAnimation] = useState(false);
 
-    console.log('on');
     useEffect(() => {
         let timer = setTimeout(() => {
             setShow(false);
@@ -34,7 +34,7 @@ function Detail({ product, stock, setStock }) {
 
     let history = useHistory();
     let { id } = useParams();
-    let item = product.find((c) => c.id === parseInt(id));
+    let item = props.product.find((c) => c.id === parseInt(id));
 
     return (
         <div className="container">
@@ -62,11 +62,13 @@ function Detail({ product, stock, setStock }) {
                     <h4 className="pt-5">{item.title}</h4>
                     <p>{item.content}</p>
                     <p>{item.price}</p>
-                    <Info stock={stock} />
+                    <Info stock={props.stock} />
                     <button
                         className="btn btn-danger"
                         onClick={() => {
-                            setStock([9, 10, 11]);
+                            // props.setStock([9, 10, 11]);
+                            props.dispatch({ type: 'add', payload: { id: 3, name: 'new pc', quan: 1 } });
+                            history.push('/cart');
                         }}
                     >
                         주문하기
@@ -134,4 +136,11 @@ function Info({ stock }) {
     return <p>재고 : {stock[0]}</p>;
 }
 
-export default Detail;
+function binder(state) {
+    return {
+        state: state.reducer,
+        alert: state.reducer2,
+    };
+}
+
+export default connect(binder)(Detail);

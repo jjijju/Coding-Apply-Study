@@ -1,8 +1,11 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
-import { connect } from 'react-redux';
+import { connect, useSelector, useDispatch } from 'react-redux';
 
 function Cart(props) {
+    let state = useSelector((state) => state.reducer);
+    let dispatch = useDispatch();
+
     return (
         <>
             <Table striped bordered hover>
@@ -15,22 +18,55 @@ function Cart(props) {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>{props.state[0].name}</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                    </tr>
+                    {state.map((product, i) => {
+                        return (
+                            <tr key={i}>
+                                <td>{product.id}</td>
+                                <td>{product.name}</td>
+                                <td>{product.quan}</td>
+                                <td>
+                                    <button
+                                        onClick={() => {
+                                            dispatch({ type: 'plus' });
+                                        }}
+                                    >
+                                        +
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            dispatch({ type: 'minus' });
+                                        }}
+                                    >
+                                        -
+                                    </button>
+                                </td>
+                            </tr>
+                        );
+                    })}
                 </tbody>
             </Table>
+            {props.alert ? (
+                <div className="my-alert">
+                    <p>지금 구매하시면 할인 20%</p>
+                    <button
+                        onClick={() => {
+                            props.dispatch({ type: 'close' });
+                        }}
+                    >
+                        닫기
+                    </button>
+                </div>
+            ) : null}
         </>
     );
 }
 
-function binder(state) {
-    return {
-        state: state,
-    };
-}
+// function binder(state) {
+//     return {
+//         state: state.reducer,
+//         alert: state.reducer2,
+//     };
+// }
 
-export default connect(binder)(Cart);
+// export default connect(binder)(Cart);
+export default Cart;
