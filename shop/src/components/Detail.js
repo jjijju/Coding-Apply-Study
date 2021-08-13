@@ -67,7 +67,7 @@ function Detail(props) {
                         className="btn btn-danger"
                         onClick={() => {
                             // props.setStock([9, 10, 11]);
-                            props.dispatch({ type: 'add', payload: { id: 3, name: 'new pc', quan: 1 } });
+                            props.dispatch({ type: 'add', payload: { id: item.id, name: item.title, quan: 1 } });
                             history.push('/cart');
                         }}
                     >

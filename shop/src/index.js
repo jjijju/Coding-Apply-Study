@@ -2,11 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
-
 import { Provider } from 'react-redux';
 import { createStore, combineReducers } from 'redux';
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+import reportWebVitals from './reportWebVitals';
 
 let alertInitiate = true;
 
@@ -20,12 +20,12 @@ function reducer2(state = alertInitiate, action) {
 
 let initiate = [
     {
-        id: 1,
+        id: 0,
         name: 'AMD',
         quan: 2,
     },
     {
-        id: 2,
+        id: 1,
         name: 'Intel',
         quan: 3,
     },
@@ -33,17 +33,26 @@ let initiate = [
 
 function reducer(state = initiate, action) {
     if (action.type === 'add') {
-        let copy = [...state];
-        copy.push(action.payload);
+        let found = state.findIndex((idx) => {
+            return idx.id === action.payload.id;
+        });
 
-        return copy;
+        if (found >= 0) {
+            let copy = [...state];
+            copy[found].quan++;
+            return copy;
+        } else {
+            let copy = [...state];
+            copy.push(action.payload);
+            return copy;
+        }
     } else if (action.type === 'plus') {
         let copy = [...state];
-        copy[0].quan++;
+        copy[action.payload].quan++;
         return copy;
     } else if (action.type === 'minus') {
         let copy = [...state];
-        copy[0].quan--;
+        copy[action.payload].quan--;
         return copy;
     } else {
         return state;
@@ -62,6 +71,11 @@ ReactDOM.render(
     </React.StrictMode>,
     document.getElementById('root')
 );
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://cra.link/PWA
+serviceWorkerRegistration.unregister();
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
