@@ -19,6 +19,7 @@ function Main({ product }) {
                     <Button variant="primary">Learn more</Button>
                 </p>
             </Jumbotron>
+
             <div className="container">
                 <div className="row">
                     <Contents camera={state} />

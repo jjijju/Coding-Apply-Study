@@ -36,85 +36,98 @@ function Detail(props) {
     let { id } = useParams();
     let item = props.product.find((c) => c.id === parseInt(id));
 
+    useEffect(() => {
+        let arr = localStorage.getItem('viewitem');
+        arr = arr === null ? [] : JSON.parse(arr);
+
+        arr.push(id);
+        arr = new Set(arr);
+        arr = [...arr];
+
+        localStorage.setItem('viewitem', JSON.stringify(arr));
+    }, []);
+
     return (
-        <div className="container">
-            <Box>
-                <Title className="red">Detail</Title>
-            </Box>
+        <>
+            <div className="container">
+                <Box>
+                    <Title className="red">Detail</Title>
+                </Box>
 
-            {input}
-            <input
-                onChange={(e) => {
-                    setInput(e.target.value);
-                }}
-            />
+                {input}
+                <input
+                    onChange={(e) => {
+                        setInput(e.target.value);
+                    }}
+                />
 
-            {show ? (
-                <div className="my-alert my-alert-red">
-                    <p>재고가 얼마 남지 않았습니다.</p>
+                {show ? (
+                    <div className="my-alert my-alert-red">
+                        <p>재고가 얼마 남지 않았습니다.</p>
+                    </div>
+                ) : null}
+                <div className="row">
+                    <div className="col-md-6">
+                        <img src={item.image} alt={item.title} width="100%" />
+                    </div>
+                    <div className="col-md-6 mt-4">
+                        <h4 className="pt-5">{item.title}</h4>
+                        <p>{item.content}</p>
+                        <p>{item.price}</p>
+                        <Info stock={props.stock} />
+                        <button
+                            className="btn btn-danger"
+                            onClick={() => {
+                                // props.setStock([9, 10, 11]);
+                                props.dispatch({ type: 'add', payload: { id: item.id, name: item.title, quan: 1 } });
+                                history.push('/cart');
+                            }}
+                        >
+                            주문하기
+                        </button>
+                        &nbsp;
+                        <button
+                            className="btn btn-danger"
+                            onClick={() => {
+                                history.goBack();
+                                // history.push('/');
+                            }}
+                        >
+                            뒤로가기
+                        </button>
+                    </div>
                 </div>
-            ) : null}
-            <div className="row">
-                <div className="col-md-6">
-                    <img src={item.image} alt={item.title} width="100%" />
-                </div>
-                <div className="col-md-6 mt-4">
-                    <h4 className="pt-5">{item.title}</h4>
-                    <p>{item.content}</p>
-                    <p>{item.price}</p>
-                    <Info stock={props.stock} />
-                    <button
-                        className="btn btn-danger"
-                        onClick={() => {
-                            // props.setStock([9, 10, 11]);
-                            props.dispatch({ type: 'add', payload: { id: item.id, name: item.title, quan: 1 } });
-                            history.push('/cart');
-                        }}
-                    >
-                        주문하기
-                    </button>
-                    &nbsp;
-                    <button
-                        className="btn btn-danger"
-                        onClick={() => {
-                            history.goBack();
-                            // history.push('/');
-                        }}
-                    >
-                        뒤로가기
-                    </button>
-                </div>
+
+                <Nav className="mt-5" variant="tabs" defaultActiveKey="link-0">
+                    <Nav.Item>
+                        <Nav.Link
+                            eventKey="link-0"
+                            onClick={() => {
+                                setAnimation(false);
+                                setTab(0);
+                            }}
+                        >
+                            Active
+                        </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link
+                            eventKey="link-1"
+                            onClick={() => {
+                                setAnimation(false);
+                                setTab(1);
+                            }}
+                        >
+                            Option 2
+                        </Nav.Link>
+                    </Nav.Item>
+                </Nav>
+
+                <CSSTransition in={animation} classNames="trans" timeout={500}>
+                    <TabContent tab={tab} setAnimation={setAnimation} />
+                </CSSTransition>
             </div>
-
-            <Nav className="mt-5" variant="tabs" defaultActiveKey="link-0">
-                <Nav.Item>
-                    <Nav.Link
-                        eventKey="link-0"
-                        onClick={() => {
-                            setAnimation(false);
-                            setTab(0);
-                        }}
-                    >
-                        Active
-                    </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                    <Nav.Link
-                        eventKey="link-1"
-                        onClick={() => {
-                            setAnimation(false);
-                            setTab(1);
-                        }}
-                    >
-                        Option 2
-                    </Nav.Link>
-                </Nav.Item>
-            </Nav>
-
-            <CSSTransition in={animation} classNames="trans" timeout={500}>
-                <TabContent tab={tab} setAnimation={setAnimation} />
-            </CSSTransition>
-        </div>
+        </>
     );
 }
 
